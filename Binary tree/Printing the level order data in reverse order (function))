@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+};
+
+void print(Node *root)  /// Time : 2*n
+{
+    queue<Node *> q;
+    stack<Node *> stak,f_stak;
+    if(root==NULL) return;
+    q.push(root);
+    q.push(NULL);
+    bool flag=0;
+    while(!q.empty())
+    {
+        root=q.front();q.pop();
+        if(root!=NULL)
+        {
+            if(root->left) q.push(root->left);
+            if(root->right) q.push(root->right);
+            stak.push(root);
+            flag=0;
+        }
+        else
+        {
+            if(flag==0) {q.push(NULL);flag=1;}
+            while(!stak.empty())
+            {
+                f_stak.push(stak.top());
+                stak.pop();
+            }
+        }
+    }
+    while(!f_stak.empty())
+    {
+        cout<<f_stak.top()->data<<" ";f_stak.pop();
+    }
+}
+
+int main()
+{
+    int n,i=0;
+    cin>>n;
+    queue<Node*> q;
+    Node *root,*temp=new Node();n--;
+    root=temp;
+    q.push(temp);
+    while(!q.empty())
+    {
+        temp=q.front();q.pop();
+        temp->data=++i;
+        if(n>0) {temp->left=new Node();n--;q.push(temp->left);}
+        if(n>0) {temp->right=new Node();n--;q.push(temp->right);}
+    }
+
+    cout<<"Printing the level order data in reverse order  "<<endl;
+    print(root);
+    return 0;
+}
