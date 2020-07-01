@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+};
+
+int dfs(Node *root,int a,vector<Node*> &ret)
+{
+    if(root==NULL) return 0;
+    ret.push_back(root);
+    //cout<<"IN : "<<root->data<<endl;
+    if(root->data==a || dfs(root->left,a,ret)==1 || dfs(root->right,a,ret)==1) {/*cout<<"complete";*/return 1;}
+    ret.pop_back();
+    //cout<<"OUT : "<<root->data<<endl;
+    return -1;
+}
+
+void find_lca(int a,int b,Node *root) /// O(n) time complexity
+{
+    int ans,i=0;
+    vector<Node *> vec_A,vec_B;
+    dfs(root,a,vec_A);
+    dfs(root,b,vec_B);
+    if(vec_A[i]==vec_B[i]) ans=vec_A[i++]->data;
+    else {cout<<"No LCA possible";return;}
+    while(1)
+    {
+        if(((vec_A.size()-1)==i) || ((vec_B.size()-1)==i)) break;
+        if(vec_A[i]!=vec_B[i]) break;
+        ans=vec_A[i++]->data;
+    }
+    cout<<"Value of LCA node is "<<ans<<endl;
+}
+
+
+int main()
+{
+    int n,i=0,a,b;
+    cin>>n;
+    queue<Node*> q;
+    Node *root,*temp=new Node();n--;
+    root=temp;
+    q.push(temp);
+    while(!q.empty())
+    {
+        temp=q.front();q.pop();
+        temp->data=++i;
+        if(n>0) {temp->left=new Node();n--;q.push(temp->left);}
+        if(n>0) {temp->right=new Node();n--;q.push(temp->right);}
+    }
+
+    cin>>a>>b;
+    find_lca(a,b,root);
+    return 0;
+}
